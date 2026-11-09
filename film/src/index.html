@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<title>Nollkomma 30 s</title>
+<style>
+:root{--kalk:#EDF0EC;--ink:#15201E;--strom:#0B5A55;--tint:#D3E4E0;--muted:#4A5754;--warn:#B5472B;--line:#DCE3E0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#EDF0EC;overflow:hidden}
+#frame{position:relative;overflow:hidden;font-family:'FG',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+.scene{position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden;display:none}
+.stage{position:absolute;left:72px;width:936px;height:960px}
+.hl{position:absolute;left:0;width:936px;font-weight:700;letter-spacing:-0.035em;line-height:0.98}
+.ln{overflow:hidden;padding:0.1em 0 0.14em;margin:-0.1em 0 -0.14em}
+.ln>span{display:inline-block;white-space:nowrap;transform:translateY(115%)}
+.d{display:inline-block;width:0.6em;text-align:center}
+.row{position:absolute;left:0;width:936px;height:100px;display:flex;align-items:center;justify-content:space-between}
+.cnt{font-weight:700;font-size:84px;letter-spacing:-0.03em;line-height:1;display:flex;align-items:center;gap:18px}
+.chip{font-weight:600;font-size:29px;padding:14px 24px;border-radius:999px;border:2.5px solid currentColor;white-space:nowrap;line-height:1.1}
+.ok{width:64px;height:64px;border-radius:50%;background:var(--strom);color:#fff;display:flex;align-items:center;justify-content:center}
+.ok svg{width:40px;height:40px}
+/* phone */
+.phone{position:absolute;width:600px;height:1240px;transform-origin:0 0}
+.phone .body{position:absolute;inset:0;border-radius:90px;background:#15201E;box-shadow:0 50px 90px rgba(21,32,30,.20),0 10px 24px rgba(21,32,30,.14)}
+.phone .screen{position:absolute;left:16px;top:16px;width:568px;height:1208px;border-radius:74px;background:#fff;overflow:hidden}
+.phone .notch{position:absolute;left:228px;top:36px;width:144px;height:40px;border-radius:20px;background:#15201E;z-index:5}
+.sbar{position:absolute;left:0;top:0;width:568px;height:84px;z-index:4;pointer-events:none}
+.sbar .tm{position:absolute;left:58px;top:30px;font-weight:600;font-size:25px}
+.sbar .ic{position:absolute;top:36px;height:18px;border-radius:4px;background:#15201E}
+.page{position:absolute;left:0;top:0;width:568px;height:1208px;background:#fff}
+.urlp{position:absolute;left:24px;top:98px;width:520px;height:66px;border-radius:33px;background:#EEF1EF;display:flex;align-items:center;gap:14px;padding:0 26px;font-weight:500;font-size:26px;color:#33413E}
+.urlp .gbar{height:14px;width:240px;border-radius:7px;background:#C9D2CE}
+.lockdot{width:16px;height:16px;border-radius:50%;background:#9AA8A4;flex:none}
+.pbar{position:absolute;left:0;top:178px;width:568px;height:7px;background:#E7ECEA}
+.pfill{height:100%;width:0;background:#7D8B87}
+/* search page */
+.sfield{position:absolute;left:24px;top:98px;width:520px;height:76px;border-radius:38px;border:2.5px solid #CBD5D1;display:flex;align-items:center;gap:14px;padding:0 26px;font-weight:600;font-size:33px;color:#15201E;background:#fff}
+.sfield svg{width:30px;height:30px;color:#4A5754;flex:none}
+.caret{display:inline-block;width:3px;height:34px;background:#0B5A55;margin-left:2px;vertical-align:middle}
+.aic{position:absolute;left:24px;top:198px;width:520px;height:350px;border-radius:30px;background:#EEF3F1}
+.aih{position:absolute;left:28px;top:22px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:30px;color:#0B5A55}
+.aih svg{width:28px;height:28px}
+.air{position:absolute;left:28px;width:464px;height:48px}
+.air .c{position:absolute;left:0;top:4px;width:40px;height:40px;border-radius:50%;background:#C6D1CD}
+.air .b1{position:absolute;left:58px;top:6px;height:16px;border-radius:8px;background:#B9C5C1}
+.air .b2{position:absolute;left:58px;top:32px;height:11px;border-radius:6px;background:#D3DCD9}
+.slot{position:absolute;left:24px;top:272px;width:472px;height:60px;border-radius:16px;border:3.5px dashed var(--warn);color:var(--warn);font-weight:700;font-size:30px;display:flex;align-items:center;padding-left:20px}
+.res{position:absolute;left:24px;width:520px;height:112px}
+.res .t{position:absolute;left:4px;top:8px;height:20px;border-radius:10px;background:#55625F}
+.res .u{position:absolute;left:4px;top:40px;height:12px;border-radius:6px;background:#A3B0AC}
+.res .x1,.res .x2{position:absolute;left:4px;height:12px;border-radius:6px;background:#DCE3E0}
+.res .x1{top:64px;width:470px}.res .x2{top:86px;width:360px}
+.touch{position:absolute;width:76px;height:76px;border-radius:50%;background:rgba(21,32,30,.22);border:3px solid rgba(255,255,255,.7);z-index:6}
+/* site page */
+.cover{position:absolute;left:0;top:186px;width:568px;height:1022px;background:#fff;z-index:3}
+.snav{position:absolute;left:30px;top:204px;width:508px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.snav .br{font-weight:700;font-size:30px;letter-spacing:-0.01em}
+.snav .bk{height:50px;padding:0 22px;border-radius:25px;background:#0B5A55;color:#fff;font-weight:600;font-size:22px;display:flex;align-items:center}
+.sh1{position:absolute;left:30px;top:286px;width:508px;font-weight:700;font-size:51px;line-height:0.98;letter-spacing:-0.03em}
+.spanel{position:absolute;left:24px;top:510px;width:520px;height:226px;border-radius:30px;background:#D3E4E0;padding:26px 30px}
+.spanel .pl{font-size:24px;color:#2C3B38}
+.spanel .pn{display:flex;align-items:baseline;gap:12px;color:#0B5A55;margin-top:6px}
+.spanel .pn .n{font-weight:700;font-size:132px;line-height:0.9;letter-spacing:-0.05em}
+.spanel .pn .s{font-weight:600;font-size:32px}
+.ssub{position:absolute;left:30px;top:768px;width:508px;font-size:25px;line-height:1.45;color:#33413E}
+.scta{position:absolute;left:30px;top:906px;height:66px;padding:0 30px;border-radius:33px;background:#0B5A55;color:#fff;font-weight:600;font-size:26px;display:flex;align-items:center}
+/* reveal */
+.big{position:absolute;left:0;width:936px;text-align:center;color:#fff;font-weight:700;white-space:nowrap}
+.big span{display:inline-block}
+/* code cards */
+.card{position:absolute;left:0;top:0;width:936px;border-radius:28px;background:#0F1817;border:2px solid #2B3A37;padding:26px 34px 30px;transform-origin:50% 0}
+.cap{font:500 26px 'IBM Plex Mono',monospace;color:#9FB3AE;margin-bottom:14px}
+.code{margin:0;font:400 31px/1.46 'IBM Plex Mono',monospace;color:#E3ECE9;white-space:pre;min-height:1px}
+.k{color:#7FC4B8}.cm{color:#6F8A84}.p{color:#9FB3AE}
+.aicard2{background:#D3E4E0;border:none;color:#15201E}
+.aicard2 .h{display:flex;align-items:center;gap:12px;font-weight:600;font-size:30px;color:#0B5A55}
+.aicard2 .h svg{width:34px;height:34px}
+.aicard2 .bd{font-weight:500;font-size:40px;line-height:1.22;letter-spacing:-0.01em;margin-top:16px}
+.aicard2 .ft{display:inline-flex;align-items:center;gap:10px;margin-top:20px;font-weight:600;font-size:27px;color:#0B5A55;background:#EDF0EC;border-radius:999px;padding:10px 20px 10px 12px}
+.aicard2 .ft .ok{width:36px;height:36px}.aicard2 .ft .ok svg{width:24px;height:24px}
+/* checklist */
+.li{position:absolute;left:0;height:84px;display:flex;align-items:center;gap:26px;font-weight:600;font-size:48px;letter-spacing:-0.02em}
+.li .ok{width:66px;height:66px;flex:none}
+.pin{position:absolute;left:0;height:104px;border-radius:52px;background:#D3E4E0;display:flex;align-items:center;gap:16px;padding:0 40px 0 30px;font-weight:700;font-size:50px;letter-spacing:-0.02em;color:#15201E}
+.pin svg{width:50px;height:50px;color:#0B5A55}
+/* end card */
+.badge{position:absolute;left:0;width:140px;height:140px;border-radius:34px;background:#fff;color:#0B5A55;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:92px;letter-spacing:-0.04em;line-height:1;padding-bottom:8px}
+.ename{position:absolute;left:170px;font-weight:700;font-size:128px;letter-spacing:-0.04em;line-height:1;color:#fff}
+.etag{position:absolute;left:0;width:936px;font-weight:500;font-size:52px;line-height:1.15;letter-spacing:-0.015em;color:rgba(255,255,255,.88)}
+.eprice{position:absolute;left:0;font-weight:700;font-size:112px;letter-spacing:-0.04em;line-height:1;color:#fff}
+.esmall{position:absolute;left:0;font-size:35px;color:rgba(255,255,255,.78)}
+.ecta{position:absolute;left:0;height:112px;padding:0 52px;border-radius:56px;background:#fff;color:#0B5A55;font-weight:700;font-size:48px;letter-spacing:-0.02em;display:flex;align-items:center}
+.eurl{position:absolute;left:0;font-weight:600;font-size:58px;letter-spacing:-0.02em;color:#fff}
+.wm{position:absolute;font-weight:700;letter-spacing:-0.06em;line-height:0.8;color:rgba(255,255,255,.07);white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="frame">
+
+<!-- A: hook + search (0–8 s) -->
+<div class="scene" id="sA" style="background:var(--kalk)"><div class="stage">
+  <div class="hl" id="hA1" data-size="118" style="top:0"><div class="ln"><span>Din kund</span></div><div class="ln"><span>väntar inte.</span></div></div>
+  <div class="hl" id="hA2" data-size="100" style="top:0"><div class="ln"><span>Frågar de Google</span></div><div class="ln"><span>eller en AI –</span></div><div class="ln"><span>finns du med?</span></div></div>
+  <div class="row" id="rowA" style="top:254px"><div class="cnt"><span id="cntA"></span></div><div class="chip" id="chipA">Googles riktmärke: 2,5&nbsp;s</div></div>
+  <div class="phone" id="phA" style="left:192px;top:376px"></div>
+</div></div>
+
+<!-- B: reveal (8–9.8 s) -->
+<div class="scene" id="sB" style="background:var(--strom)"><div class="stage">
+  <div class="big" id="bigNum" style="top:120px;font-size:460px;letter-spacing:-0.05em;line-height:1"><span id="bnA"></span><span id="bnB"></span></div>
+  <div class="big" id="bigName" style="top:640px;font-size:140px;letter-spacing:-0.04em;line-height:1"><div class="ln"><span>Nollkomma</span></div></div>
+</div></div>
+
+<!-- C: proof (9.8–15 s) -->
+<div class="scene" id="sC" style="background:var(--kalk)"><div class="stage">
+  <div class="hl" id="hC1" data-size="118" style="top:0"><div class="ln"><span>Klar på</span></div><div class="ln"><span>nolltid.</span></div></div>
+  <div class="hl" id="hC2" data-size="118" style="top:0"><div class="ln"><span>Uppmätt –</span></div><div class="ln"><span style="color:var(--strom)">inte utlovat.</span></div></div>
+  <div class="row" id="rowC" style="top:240px"><div class="cnt" id="cntCwrap"><span id="cntC"></span><span class="ok" id="okC"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div class="chip" id="chipC" style="color:var(--muted)">Googles riktmärke: 2,5&nbsp;s</div></div>
+  <div class="phone" id="phC" style="left:204px;top:352px"></div>
+</div></div>
+
+<!-- D: Google + AI (15–21 s) -->
+<div class="scene" id="sD" style="background:#15201E"><div class="stage">
+  <div class="hl" id="hD" data-size="100" style="top:0;color:#fff"><div class="ln"><span>Byggd för att</span></div><div class="ln"><span>synas på Google</span></div><div class="ln"><span>och förstås av AI.</span></div></div>
+  <div class="card" id="cd1"><div class="cap">robots.txt</div><pre class="code" id="cd1c"></pre></div>
+  <div class="card" id="cd2"><div class="cap">llms.txt</div><pre class="code" id="cd2c"></pre></div>
+  <div class="card" id="cd3"><div class="cap">schema.org</div><pre class="code" id="cd3c"></pre></div>
+  <div class="card aicard2" id="cd4">
+    <div class="h"><svg viewBox="0 0 24 24"><path d="M12 2l2.3 6.7L21 11l-6.7 2.3L12 20l-2.3-6.7L3 11l6.7-2.3z" fill="currentColor"/></svg>AI-svar</div>
+    <div class="bd" id="cd4b">Ditt företag är en frisör i Norrköping med öppet mån–fre 9–18.</div>
+    <div class="ft" id="cd4f"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Fakta från din sajt</div>
+  </div>
+</div></div>
+
+<!-- E: service + local (21–25.5 s) -->
+<div class="scene" id="sE" style="background:var(--kalk)"><div class="stage">
+  <div class="hl" id="hE" data-size="104" style="top:0"><div class="ln"><span>Allt sköts åt dig,</span></div><div class="ln"><span>varje månad.</span></div></div>
+  <div class="li" id="li1" style="top:268px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Drift och säkerhetskopior</div>
+  <div class="li" id="li2" style="top:372px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Ändringar varje månad</div>
+  <div class="li" id="li3" style="top:476px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Månadsrapport</div>
+  <div class="li" id="li4" style="top:580px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Svar inom två arbetsdagar</div>
+  <div class="pin" id="pinE" style="top:730px"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z" fill="currentColor"/><circle cx="12" cy="10" r="2.7" fill="#D3E4E0"/></svg>Lokalt i Norrköping</div>
+  <svg id="river" style="position:absolute;left:-72px;top:872px;width:1080px;height:80px;overflow:visible" viewBox="0 0 1080 80"><path id="riverP" d="M0 40 C 120 6, 240 74, 360 40 S 600 6, 720 40 S 960 74, 1080 40" fill="none" stroke="#0B5A55" stroke-opacity=".35" stroke-width="10" stroke-linecap="round"/></svg>
+</div></div>
+
+<!-- F: end card (25.5–30 s) -->
+<div class="scene" id="sF" style="background:var(--strom)">
+  <div class="wm" id="wmF">0,</div>
+  <div class="stage">
+  <div class="badge" id="eBadge" style="top:40px">0,</div>
+  <div class="ename" id="eName" style="top:46px"><div class="ln"><span>Nollkomma</span></div></div>
+  <div class="etag" id="eTag" style="top:236px">Snabba hemsidor för<br>småföretag i Norrköping.</div>
+  <div class="eprice" id="ePrice" style="top:416px"><div class="ln"><span>Från 595&nbsp;kr/mån</span></div></div>
+  <div class="esmall" id="eSmall" style="top:548px">exkl. moms · ny sajt från 4&nbsp;900&nbsp;kr</div>
+  <div class="ecta" id="eCta" style="top:648px">Boka 15 minuter</div>
+  <div class="eurl" id="eUrl" style="top:800px">nollkomma.se</div>
+</div></div>
+
+</div>
+<script>
+const P = new URLSearchParams(location.search);
+const FMT = P.get('fmt') || '916';
+const CFG = FMT === '45' ? {W:1080,H:1350,stageTop:195,revDY:0} : {W:1080,H:1920,stageTop:290,revDY:110};
+const MEAS = P.get('n') || '0,4';             // uppmätt laddtid – platshållare tills sajten är live
+const MEAS_S = parseFloat(MEAS.replace(',', '.'));
+const [MEAS_A, MEAS_B] = MEAS.split(',');
+
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const eOut=x=>1-Math.pow(1-x,3);
+const eOut5=x=>1-Math.pow(1-x,5);
+const eIn=x=>x*x*x;
+const eInOut=x=>x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eBack=x=>{const c1=1.6,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+const $=id=>document.getElementById(id);
+const fmt1=v=>v.toFixed(1).replace('.',',');
+const CHECK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function numHTML(str){return [...str].map(c=>/\d/.test(c)?`<span class="d">${c}</span>`:(c===' '?'&nbsp;':c)).join('');}
+
+function phone(el, pagesHTML){
+  el.innerHTML = `<div class="body"></div><div class="screen">
+    <div class="sbar"><span class="tm">08:12</span>
+      <span class="ic" style="left:412px;width:8px;top:46px;height:8px"></span><span class="ic" style="left:424px;width:8px;top:41px;height:13px"></span><span class="ic" style="left:436px;width:8px;top:36px;height:18px"></span>
+      <span class="ic" style="left:462px;width:46px;height:20px;border-radius:6px;opacity:.85"></span></div>
+    ${pagesHTML}</div><div class="notch"></div>`;
+}
+
+const SEARCH_Q = 'frisör norrköping';
+
+function buildA(){
+  phone($('phA'), `
+  <div class="page" id="pgSlow">
+    <div class="urlp"><span class="lockdot"></span><span class="gbar"></span></div>
+    <div class="pbar"><div class="pfill" id="slowFill"></div></div>
+    <svg style="position:absolute;left:224px;top:500px" width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="44" fill="none" stroke="#E3E8E6" stroke-width="10"/><g id="spinG"><path d="M60 16 A44 44 0 0 1 104 60" fill="none" stroke="#15201E" stroke-width="10" stroke-linecap="round"/></g></svg>
+  </div>
+  <div class="page" id="pgSearch">
+    <div class="sfield"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg><span><span id="q"></span><span class="caret" id="caret"></span></span></div>
+    <div class="aic" id="aic">
+      <div class="aih"><svg viewBox="0 0 24 24"><path d="M12 2l2.3 6.7L21 11l-6.7 2.3L12 20l-2.3-6.7L3 11l6.7-2.3z" fill="currentColor"/></svg>AI-svar</div>
+      <div class="air" id="ar1" style="top:82px"><span class="c"></span><span class="b1" style="width:260px"></span><span class="b2" style="width:340px"></span></div>
+      <div class="air" id="ar2" style="top:144px"><span class="c"></span><span class="b1" style="width:210px"></span><span class="b2" style="width:300px"></span></div>
+      <div class="air" id="ar3" style="top:206px"><span class="c"></span><span class="b1" style="width:290px"></span><span class="b2" style="width:250px"></span></div>
+      <div class="slot" id="slot">Ditt företag?</div>
+    </div>
+    <div class="res" id="rs1" style="top:574px"><span class="t" style="width:330px"></span><span class="u" style="width:210px"></span><span class="x1"></span><span class="x2"></span></div>
+    <div class="res" id="rs2" style="top:704px"><span class="t" style="width:280px"></span><span class="u" style="width:180px"></span><span class="x1"></span><span class="x2"></span></div>
+    <div class="res" id="rs3" style="top:834px"><span class="t" style="width:360px"></span><span class="u" style="width:230px"></span><span class="x1"></span><span class="x2"></span></div>
+  </div>
+  <div class="touch" id="touch"></div>`);
+}
+
+function buildC(){
+  phone($('phC'), `
+  <div class="page" id="pgSite">
+    <div class="urlp" style="color:#15201E"><span class="lockdot" style="background:#0B5A55"></span>nollkomma.se</div>
+    <div class="pbar"><div class="pfill" id="siteFill" style="background:#0B5A55"></div></div>
+    <div id="siteBody">
+      <div class="snav"><span class="br">Nollkomma</span><span class="bk">Boka</span></div>
+      <div class="sh1">Snabba hemsidor för småföretag i Norrköping.</div>
+      <div class="spanel"><div class="pl">Den här sidan laddade på</div><div class="pn"><span class="n">${MEAS}</span><span class="s">sekunder</span></div></div>
+      <div class="ssub">Jag bygger och sköter din sajt och ser till att den syns i Google och i AI-tjänster.</div>
+      <div class="scta">Boka 15 minuter</div>
+    </div>
+    <div class="cover" id="siteCover"></div>
+  </div>`);
+}
+
+// code cards: lines of [text, class]
+const CARDS = {
+  cd1c: [[['# Släpp in AI-tjänsterna','cm']],[['User-agent: ','k'],['GPTBot','']],[['Allow: ','k'],['/','']],[['User-agent: ','k'],['ClaudeBot','']],[['Allow: ','k'],['/','']]],
+  cd2c: [[['# Ditt företag','k']],[['> ','p'],['Frisör i Norrköping.','']],[['## Öppettider','k']],[['Mån–fre 9–18','']]],
+  cd3c: [[['"@type"','k'],[': ','p'],['"HairSalon"','']],[['"areaServed"','k'],[': ','p'],['"Norrköping"','']],[['"openingHours"','k'],[':','p']],[['  "Mo-Fr 09:00-18:00"','']]],
+};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const CARD_LEN = {};
+for (const k in CARDS) CARD_LEN[k] = CARDS[k].reduce((n,l)=>n+l.reduce((m,[s])=>m+s.length,0)+1,0);
+function typeCard(id, frac){
+  let n = Math.round(CARD_LEN[id]*frac), out=[];
+  for (const line of CARDS[id]) {
+    let s='';
+    for (const [txt,cls] of line) { if (n<=0) break; const part=txt.slice(0,n); n-=part.length; s += cls?`<span class="${cls}">${esc(part)}</span>`:esc(part); }
+    out.push(s); n-=1;
+    if (n<0) break;
+  }
+  // keep full height so the card does not grow while typing
+  while (out.length < CARDS[id].length) out.push('');
+  $(id).innerHTML = out.join('\n') || ' ';
+}
+
+function fitHeadlines(){
+  document.querySelectorAll('.hl,#eName,#ePrice,#bigName').forEach(h=>{
+    const size = +h.dataset.size || parseFloat(getComputedStyle(h).fontSize);
+    h.style.fontSize = size+'px';
+    let maxW = 0; h.querySelectorAll('.ln>span').forEach(s=>{maxW=Math.max(maxW,s.getBoundingClientRect().width)});
+    const avail = h.id==='eName' ? 936-170 : 936;
+    if (maxW > avail) h.style.fontSize = Math.floor(size*avail/maxW)+'px';
+  });
+}
+
+let W4 = 0;
+window.init = function(){
+  const f=$('frame'); f.style.width=CFG.W+'px'; f.style.height=CFG.H+'px';
+  document.querySelectorAll('.stage').forEach(s=>s.style.top=CFG.stageTop+'px');
+  buildA(); buildC();
+  $('bnA').textContent = MEAS_A + ','; $('bnB').textContent = MEAS_B;
+  $('bigNum').style.top = (120+CFG.revDY)+'px'; $('bigName').style.top = (640+CFG.revDY)+'px';
+  // scenes must be laid out (not display:none) while measuring
+  document.querySelectorAll('.scene').forEach(s=>s.style.display='block');
+  for (const k in CARDS) { typeCard(k, 1); $(k).style.minHeight = (CARDS[k].length*31*1.46).toFixed(1)+'px'; }
+  fitHeadlines();
+  W4 = $('bnB').getBoundingClientRect().width;
+  // card tops are set per frame; measure nothing else
+  const wm=$('wmF'); wm.style.fontSize='760px'; wm.style.right='-40px'; wm.style.bottom=(FMT==='45'?-150:-120)+'px';
+  for (const k in CARDS) typeCard(k, 0);
+  window.render(0);
+};
+
+function lines(el, t, tin, tout, stagger=0.07, dur=0.55){
+  el.querySelectorAll('.ln>span').forEach((s,i)=>{
+    const pin = eOut5(prog(t, tin+i*stagger, tin+i*stagger+dur));
+    const pout = tout==null ? 0 : eIn(prog(t, tout+i*0.04, tout+i*0.04+0.3));
+    s.style.transform = `translateY(${(115*(1-pin) - 125*pout).toFixed(2)}%)`;
+  });
+}
+function vis(el, on){ el.style.display = on ? '' : 'none'; }
+function show(id, t, a, b){ $(id).style.display = (t>=a && t<b) ? 'block' : 'none'; }
+function slideUp(id, t, s){ const p=eInOut(prog(t,s,s+0.45)); $(id).style.transform = `translateY(${((1-p)*100).toFixed(3)}%)`; }
+function fadeUp(el, t, a, d=0.45, dy=36){ const p=eOut(prog(t,a,a+d)); el.style.opacity=p; el.style.transform=`translateY(${((1-p)*dy).toFixed(2)}px)`; return p; }
+function pop(el, t, a, d=0.45, from=0.6){ const x=prog(t,a,a+d); const p = x<=0?0:eBack(x); el.style.opacity = clamp(x*3); el.style.transform = `scale(${(from+(1-from)*p).toFixed(4)})`; }
+
+const T = { B:8.0, C:9.8, D:15.0, E:21.0, F:25.5, END:30.0 };
+
+window.render = function(t){
+  show('sA', t, 0, T.B);
+  show('sB', t, T.B, T.C+0.45);
+  show('sC', t, T.C, T.D+0.45);
+  show('sD', t, T.D, T.E+0.45);
+  show('sE', t, T.E, T.F+0.45);
+  show('sF', t, T.F, 99);
+
+  // ---------- A ----------
+  if (t < T.B) {
+    lines($('hA1'), t, 0.05, 3.45);
+    lines($('hA2'), t, 3.95, null, 0.08);
+    // counter
+    const v = Math.max(0, t-0.35);
+    const late = v >= 2.5;
+    const row = $('rowA');
+    const po = eIn(prog(t,3.45,3.75));
+    row.style.opacity = (eOut(prog(t,0.1,0.45))*(1-po)).toFixed(3);
+    row.style.transform = `translateY(${(-30*po).toFixed(1)}px)`;
+    $('cntA').innerHTML = numHTML(fmt1(Math.min(v, 9.9)) + ' s');
+    $('cntA').style.color = late ? 'var(--warn)' : 'var(--ink)';
+    const chip = $('chipA'); chip.style.color = 'var(--warn)';
+    pop(chip, t, 2.85, 0.4, 0.75);
+    // phone entrance
+    const pin = eOut5(prog(t,0,0.6));
+    $('phA').style.transform = `translateY(${((1-pin)*120).toFixed(1)}px) scale(0.92)`;
+    // slow page
+    $('slowFill').style.width = (6 + 26*eOut(prog(t,0.3,3.4))).toFixed(2)+'%';
+    $('spinG').setAttribute('transform', `rotate(${(t*400)%360} 60 60)`);
+    const sw = eInOut(prog(t,3.45,3.9));
+    $('pgSlow').style.transform = `translateX(${(-112*sw).toFixed(2)}%)`;
+    $('pgSearch').style.transform = `translateX(${(100*(1-sw)).toFixed(2)}%)`;
+    // touch indicator (swipe)
+    const tp = prog(t,3.25,3.85), touch=$('touch');
+    touch.style.opacity = (Math.sin(Math.PI*tp)*1.2).toFixed(3);
+    touch.style.left = (450 - 330*eInOut(prog(t,3.4,3.85)) ).toFixed(1)+'px';
+    touch.style.top = '720px';
+    // search
+    const nq = Math.round(SEARCH_Q.length*prog(t,4.25,5.05));
+    $('q').textContent = SEARCH_Q.slice(0,nq);
+    $('caret').style.opacity = (t<5.05 || Math.floor(t*2.2)%2===0) && t<6.0 ? 1 : 0;
+    fadeUp($('aic'), t, 5.15, 0.45, 30);
+    ['ar1','ar2','ar3'].forEach((id,i)=>fadeUp($(id), t, 5.35+i*0.14, 0.4, 18));
+    ['rs1','rs2','rs3'].forEach((id,i)=>fadeUp($(id), t, 5.55+i*0.14, 0.45, 24));
+    const slot=$('slot'); pop(slot, t, 6.35, 0.45, 0.85);
+    const sh = prog(t,6.85,7.35);
+    if (sh>0 && sh<1) slot.style.transform += ` translateX(${(Math.sin(sh*Math.PI*6)*9*(1-sh)).toFixed(2)}px)`;
+  }
+
+  // ---------- B ----------
+  if (t >= T.B && t < T.C+0.45) {
+    const k = prog(t, T.B, T.B+0.4);
+    const sc = 1.14 - 0.14*eOut5(k);
+    const out = eIn(prog(t, T.B+0.55, T.B+0.85));
+    const shift = eInOut(prog(t, T.B+0.62, T.B+1.0)) * (W4/2);
+    $('bigNum').style.transform = `translateX(${shift.toFixed(2)}px) scale(${sc.toFixed(4)})`;
+    $('bnB').style.transform = `translateY(${(out*45).toFixed(2)}%)`;
+    $('bnB').style.opacity = (1-out).toFixed(3);
+    lines($('bigName'), t, T.B+0.8, null);
+  }
+
+  // ---------- C ----------
+  if (t >= T.C && t < T.D+0.45) {
+    slideUp('sC', t, T.C);
+    const ph=$('phC'), pin=eOut5(prog(t,T.C+0.15,T.C+0.75));
+    ph.style.transform = `translateY(${((1-pin)*260).toFixed(1)}px) scale(0.88)`;
+    const L0 = T.C+0.65, L1 = L0 + MEAS_S;               // load runs in real time
+    const lp = prog(t, L0, L1);
+    $('siteFill').style.width = (100*lp).toFixed(2)+'%';
+    $('siteFill').parentElement.style.opacity = t < L1+0.25 ? 1 : 1-prog(t,L1+0.25,L1+0.45);
+    $('siteCover').style.opacity = (1-prog(t,L1,L1+0.1)).toFixed(3);
+    const sb = $('siteBody'); const sp = eOut(prog(t,L1,L1+0.35));
+    sb.style.transform = `translateY(${((1-sp)*14).toFixed(2)}px)`;
+    const row=$('rowC'); row.style.opacity = eOut(prog(t,T.C+0.3,T.C+0.6)).toFixed(3);
+    const v = t < L0 ? 0 : Math.min(t-L0, MEAS_S);
+    $('cntC').innerHTML = numHTML(fmt1(v)+' s');
+    $('cntC').style.color = t >= L1 ? 'var(--strom)' : 'var(--ink)';
+    pop($('okC'), t, L1+0.02, 0.45, 0.3);
+    lines($('hC1'), t, L1+0.15, T.C+2.85);
+    lines($('hC2'), t, T.C+3.05, null);
+  }
+
+  // ---------- D ----------
+  if (t >= T.D && t < T.E+0.45) {
+    slideUp('sD', t, T.D);
+    lines($('hD'), t, T.D+0.3, null, 0.08);
+    const arr = [T.D+0.75, T.D+1.85, T.D+2.95, T.D+4.15];
+    const ids = ['cd1','cd2','cd3','cd4'];
+    const a = arr.map(x=>eOut5(prog(t,x,x+0.5)));
+    ids.forEach((id,i)=>{
+      let d=0; for (let j=i+1;j<4;j++) d+=a[j];
+      const el=$(id);
+      el.style.display = a[i] > 0 ? 'block' : 'none';
+      // opaque cards; the ones behind peek out 62 px above and are dimmed, not see-through
+      const y = 560 - d*62 + (1-a[i])*480;
+      el.style.transform = `translateY(${y.toFixed(2)}px) scale(${(1-d*0.04).toFixed(4)})`;
+      el.style.opacity = clamp(a[i]*1.5).toFixed(3);
+      el.style.filter = d>0.001 ? `brightness(${Math.max(0.4, 1-d*0.22).toFixed(3)})` : 'none';
+      el.style.zIndex = 10+i;
+      if (i<3) typeCard(id+'c', prog(t, arr[i]+0.2, arr[i]+1.0));
+    });
+    fadeUp($('cd4b'), t, arr[3]+0.25, 0.4, 14);
+    pop($('cd4f'), t, arr[3]+0.65, 0.45, 0.7);
+  }
+
+  // ---------- E ----------
+  if (t >= T.E && t < T.F+0.45) {
+    slideUp('sE', t, T.E);
+    lines($('hE'), t, T.E+0.25, null);
+    ['li1','li2','li3','li4'].forEach((id,i)=>{
+      const el=$(id), a=T.E+0.75+i*0.2;
+      const p=eOut(prog(t,a,a+0.45));
+      el.style.opacity=p; el.style.transform=`translateX(${((1-p)*-40).toFixed(1)}px)`;
+      pop(el.querySelector('.ok'), t, a+0.05, 0.4, 0.4);
+    });
+    pop($('pinE'), t, T.E+2.05, 0.5, 0.7);
+    const rp = $('riverP'); const L = 1300;
+    rp.style.strokeDasharray = L; rp.style.strokeDashoffset = (L*(1-eInOut(prog(t,T.E+1.7,T.E+3.0)))).toFixed(1);
+  }
+
+  // ---------- F ----------
+  if (t >= T.F) {
+    slideUp('sF', t, T.F);
+    pop($('eBadge'), t, T.F+0.3, 0.5, 0.5);
+    lines($('eName'), t, T.F+0.42, null);
+    fadeUp($('eTag'), t, T.F+0.7, 0.5, 26);
+    lines($('ePrice'), t, T.F+0.95, null);
+    fadeUp($('eSmall'), t, T.F+1.2, 0.5, 18);
+    pop($('eCta'), t, T.F+1.4, 0.5, 0.8);
+    fadeUp($('eUrl'), t, T.F+1.6, 0.5, 18);
+    $('wmF').style.transform = `translateY(${(-30*eOut(prog(t,T.F,T.END))).toFixed(1)}px)`;
+  }
+};
+</script>
+</body>
+</html>

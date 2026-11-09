@@ -1,0 +1,8 @@
+preview/
+checks/
+film/out/
+film/stills/
+node_modules/
+*.zip
+*.log
+.DS_Store

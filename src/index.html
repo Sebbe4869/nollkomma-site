@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nollkomma – snabba hemsidor för småföretag i Norrköping</title>
+<meta name="description" content="Jag bygger och sköter snabba hemsidor för småföretag, med fast pris varje månad, och ser till att de syns i Google och AI-tjänster. På plats i Östergötland, på distans i hela Sverige.">
+<link rel="canonical" href="https://nollkomma.se/">
+<meta name="theme-color" content="#EDF0EC">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:site_name" content="Nollkomma">
+<meta property="og:title" content="Nollkomma – snabba hemsidor för småföretag">
+<meta property="og:description" content="Hemsidor som laddar på nolltid, syns i Google och går att läsa för AI-tjänster. Från 595 kr/mån exkl. moms.">
+<meta property="og:url" content="https://nollkomma.se/">
+<meta property="og:image" content="https://nollkomma.se/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/familjen-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/familjen-grotesk-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/*BASE*/
+/* startsidan */
+.hero{display:grid;gap:40px;padding-block:20px 72px;align-items:end}
+.hero-copy{display:flex;flex-direction:column;gap:26px;min-width:0}
+.lead{font-size:clamp(18px,2.2vw,21px);line-height:1.5;color:var(--text-2);max-width:34em}
+.meter{background:var(--tint);border-radius:28px;padding:clamp(24px,4vw,36px);display:flex;flex-direction:column;gap:8px;min-width:0}
+.meter-l,.meter-s{font-size:18px;color:var(--text-tint)}
+.meter-n{display:flex;align-items:baseline;flex-wrap:wrap;gap:14px;color:var(--strom)}
+.meter-num{font-size:clamp(88px,15vw,176px);line-height:.9;font-weight:700;letter-spacing:-.05em;font-variant-numeric:tabular-nums;min-width:3.3ch}
+.meter-u{font-size:clamp(24px,3vw,30px);font-weight:600}
+
+.film{display:grid;gap:36px;padding-block:24px 80px;align-items:center}
+.film-copy{display:flex;flex-direction:column;gap:18px;min-width:0;max-width:36em}
+.film-copy>p{font-size:19px;color:var(--text-2)}
+.film-text summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;gap:8px}
+.film-text ol{margin:6px 0 0;padding-left:1.3em;display:grid;gap:8px;color:var(--text-2)}
+.film-frame{width:100%;max-width:460px;justify-self:center;aspect-ratio:4/5;border-radius:28px;overflow:hidden;background:var(--strom);box-shadow:0 30px 60px rgba(21,32,30,.16)}
+.film-play{all:unset;position:relative;display:block;width:100%;height:100%;cursor:pointer;border-radius:28px}
+.film-play:focus-visible{outline:3px solid var(--strom);outline-offset:4px}
+.film-play img{width:100%;height:100%;object-fit:cover}
+.play{position:absolute;left:50%;top:56%;width:88px;height:88px;margin:-44px 0 0 -44px;border-radius:50%;background:var(--strom);color:var(--vit);display:grid;place-items:center;box-shadow:0 12px 30px rgba(21,32,30,.35);transition:transform .15s}
+.film-play:hover .play{transform:scale(1.06)}
+.film-meta{position:absolute;left:16px;bottom:16px;background:rgba(21,32,30,.82);color:var(--vit);font-size:15px;font-weight:600;padding:6px 12px;border-radius:999px}
+.film-frame video{width:100%;height:100%;object-fit:cover;background:var(--svart)}
+
+.section{padding-block:72px;display:flex;flex-direction:column;gap:32px}
+.head{display:flex;flex-direction:column;gap:12px;max-width:40em}
+.head p{font-size:19px;color:var(--text-2)}
+.plans{display:grid;gap:20px}
+.plan{background:var(--papper);border-radius:24px;padding:clamp(24px,3.5vw,36px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.plan h3{font-size:28px;letter-spacing:-.02em}
+.plan-hi h3{color:var(--strom)}
+.price{font-size:20px;color:var(--text-2)}
+.amount{font-size:clamp(44px,6vw,56px);font-weight:700;letter-spacing:-.04em;color:var(--svart);font-variant-numeric:tabular-nums}
+.for{color:var(--text-2)}
+.plus{font-weight:600;margin-top:4px}
+.checks{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:12px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start}
+.checks li::before{content:"";width:22px;height:22px;margin-top:3px;border-radius:50%;background:var(--strom) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18.5 8' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.note{font-size:17px;color:var(--text-3);max-width:46em}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:32px}
+.steps li{border-top:2px solid var(--svart);padding-top:20px;display:flex;flex-direction:column;gap:10px}
+.steps .n{font-size:44px;font-weight:700;line-height:1;color:var(--strom)}
+.steps p{color:var(--text-2)}
+
+.band-dark{background:var(--natt);color:var(--kalk)}
+.ai{display:grid;gap:40px;padding-block:88px;align-items:center}
+.ai h2{color:var(--vit)}
+.ai-copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.ai-copy p{font-size:19px;color:var(--natt-text)}
+.code{margin:0;background:var(--natt-2);border:1px solid var(--natt-linje);border-radius:20px;padding:clamp(20px,3vw,28px);min-width:0}
+.code figcaption{font-size:15px;color:var(--kod-2);margin-bottom:14px}
+.code figcaption a{color:var(--kod-lank)}
+.code pre{margin:0;font-family:var(--mono);font-size:15px;line-height:1.6;color:var(--kod);white-space:pre-wrap;overflow-wrap:anywhere}
+
+.faq{max-width:900px;padding-block:88px;display:flex;flex-direction:column}
+.faq h2{margin-bottom:20px}
+.faq details{border-top:1px solid var(--linje)}
+.faq details:last-of-type{border-bottom:1px solid var(--linje)}
+.faq summary{font-size:clamp(19px,2.4vw,21px);font-weight:600;cursor:pointer;padding-block:16px;min-height:44px}
+.faq details p{padding-bottom:18px;color:var(--text-2);max-width:40em}
+
+.band-tint{background:var(--tint)}
+.contact{display:grid;gap:40px;padding-block:88px;align-items:center}
+.contact-copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+.contact-copy p{font-size:19px;color:var(--text-tint);max-width:32em}
+.person{display:flex;gap:20px;align-items:center}
+.avatar{width:112px;height:112px;flex:none;border-radius:50%;background:var(--strom);color:var(--vit);display:grid;place-items:center;font-weight:700;font-size:44px;letter-spacing:-.04em;line-height:1;padding-bottom:4px}
+.person p{color:var(--text-tint)}
+.pname{font-size:22px;font-weight:700;color:var(--svart)!important}
+
+@media (min-width:640px){.steps{grid-template-columns:1fr 1fr}}
+@media (min-width:760px){.plans{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){
+  .hero{grid-template-columns:1.15fr .85fr;gap:56px;padding-block:40px 96px}
+  .film{grid-template-columns:1fr 1fr;gap:56px}
+  .ai{grid-template-columns:1fr 1fr;gap:56px}
+  .contact{grid-template-columns:1.2fr .8fr;gap:56px}
+}
+@media (min-width:1000px){.steps{grid-template-columns:repeat(4,1fr)}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"ProfessionalService","@id":"https://nollkomma.se/#foretag","name":"Nollkomma","url":"https://nollkomma.se/","logo":"https://nollkomma.se/apple-touch-icon.png","image":"https://nollkomma.se/assets/og.jpg","description":"Bygger och sköter snabba hemsidor för småföretag, med fast pris varje månad, och ser till att de syns i Google och i AI-tjänster.","telephone":"+46700510086","email":"hej@nollkomma.se","address":{"@type":"PostalAddress","addressLocality":"Norrköping","addressRegion":"Östergötlands län","addressCountry":"SE"},"areaServed":[{"@type":"AdministrativeArea","name":"Östergötlands län"},{"@type":"Country","name":"Sverige"}],"knowsLanguage":"sv","priceRange":"595–1 195 kr/mån exkl. moms","hasOfferCatalog":{"@type":"OfferCatalog","name":"Paket","itemListElement":[
+{"@type":"Offer","name":"Drift","description":"Drift, säker anslutning, säkerhetskopior, övervakning, ändringar 30 minuter per månad, månadsrapport och svar inom två arbetsdagar.","priceSpecification":{"@type":"UnitPriceSpecification","price":595,"priceCurrency":"SEK","unitCode":"MON","valueAddedTaxIncluded":false}},
+{"@type":"Offer","name":"Synlighet","description":"Allt i Drift, plus Google-företagsprofil, lokal sökoptimering varje månad, kvartalsvis koll på hur AI-tjänster beskriver företaget och ändringar 60 minuter per månad.","priceSpecification":{"@type":"UnitPriceSpecification","price":1195,"priceCurrency":"SEK","unitCode":"MON","valueAddedTaxIncluded":false}},
+{"@type":"Offer","name":"Ny sajt","description":"Ny hemsida, från 4 900 kr.","priceSpecification":{"@type":"PriceSpecification","minPrice":4900,"priceCurrency":"SEK","valueAddedTaxIncluded":false}}]}},
+{"@type":"WebSite","@id":"https://nollkomma.se/#webbplats","url":"https://nollkomma.se/","name":"Nollkomma","inLanguage":"sv-SE","publisher":{"@id":"https://nollkomma.se/#foretag"}},
+{"@type":"FAQPage","@id":"https://nollkomma.se/#fragor","mainEntity":[
+{"@type":"Question","name":"Vad kostar det?","acceptedAnswer":{"@type":"Answer","text":"Drift kostar 595 kr och Synlighet 1 195 kr i månaden, exklusive moms. En ny sajt kostar från 4 900 kr."}},
+{"@type":"Question","name":"Hur länge binder jag mig?","acceptedAnswer":{"@type":"Answer","text":"Uppsägningstiden är tre månader. Bygger jag en ny sajt åt dig gäller avtalet i minst tolv månader."}},
+{"@type":"Question","name":"Vem äger sajten?","acceptedAnswer":{"@type":"Answer","text":"Du äger ditt innehåll och din domän. Slutar du får du sajtens filer, så att du kan flytta den."}},
+{"@type":"Question","name":"Jobbar du bara i Norrköping?","acceptedAnswer":{"@type":"Answer","text":"Jag träffar kunder på plats i hela Östergötland. I resten av Sverige jobbar vi på distans, över telefon och video."}},
+{"@type":"Question","name":"Hur snabbt svarar du?","acceptedAnswer":{"@type":"Answer","text":"Inom två arbetsdagar."}},
+{"@type":"Question","name":"Kan du lova en förstaplats på Google?","acceptedAnswer":{"@type":"Answer","text":"Nej, det kan ingen. Jag fixar det som går att mäta: att sajten är snabb, att fakta stämmer och att Google och AI-tjänster kan läsa den."}}]}
+]}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Hoppa till innehållet</a>
+<header class="wrap top">
+  <div class="brand"><span class="badge" aria-hidden="true">0,</span><a href="/">Nollkomma</a></div>
+  <nav class="nav" aria-label="Huvudmeny">
+    <a href="#filmen">Filmen</a>
+    <a href="#priser">Priser</a>
+    <a href="#ai">AI-synlighet</a>
+    <a class="btn btn-sm" href="#kontakt">Boka 15 minuter</a>
+  </nav>
+</header>
+
+<main id="main">
+<section class="wrap hero" aria-labelledby="rubrik">
+  <div class="hero-copy">
+    <h1 id="rubrik">Snabba hemsidor för småföretag i Norrköping.</h1>
+    <p class="lead">Jag bygger och sköter din sajt och ser till att den syns i Google och i AI-tjänster. Fast pris varje månad, och du äger ditt innehåll och din domän.</p>
+    <div class="actions">
+      <a class="btn" href="#kontakt">Boka 15 minuter</a>
+      <a class="btn btn-ghost" href="#priser">Se priserna</a>
+    </div>
+  </div>
+  <div class="meter">
+    <p class="meter-l">Den här sidan laddade på</p>
+    <p class="meter-n"><span class="meter-num" id="laddtid">–</span><span class="meter-u">sekunder</span></p>
+    <p class="meter-s">i din webbläsare. Siffran mäts just nu, på din uppkoppling.</p>
+  </div>
+</section>
+
+<section class="wrap film" id="filmen" aria-labelledby="film-rubrik">
+  <div class="film-copy">
+    <h2 id="film-rubrik">Idén på 30 sekunder.</h2>
+    <p>Filmen är byggd i kod, med samma typsnitt och färger som sajten. Den laddas först när du trycker på den, så sidan är lika snabb ändå.</p>
+    <details class="film-text">
+      <summary>Läs filmen som text</summary>
+      <ol>
+        <li>Din kund väntar inte. En sida laddar i över tre sekunder, förbi Googles riktmärke på 2,5 sekunder.</li>
+        <li>Frågar de Google eller en AI – finns du med?</li>
+        <li>Nollkomma. Klar på nolltid: 0,4 sekunder. Uppmätt, inte utlovat.</li>
+        <li>Byggd för att synas på Google och förstås av AI.</li>
+        <li>Allt sköts åt dig, varje månad: drift och säkerhetskopior, ändringar, månadsrapport och svar inom två arbetsdagar. Lokalt i Norrköping.</li>
+        <li>Från 595 kr/mån exkl. moms. Ny sajt från 4&nbsp;900 kr. Boka 15 minuter.</li>
+      </ol>
+    </details>
+  </div>
+  <div class="film-frame">
+    <button type="button" class="film-play" id="film-play">
+      <img src="/assets/film/poster.webp" width="720" height="900" alt="" loading="lazy" decoding="async">
+      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8.5 5.8v12.4L18.6 12z" fill="currentColor"/></svg></span>
+      <span class="sr-only">Spela filmen, </span><span class="film-meta">30 s · utan ljud</span>
+    </button>
+  </div>
+</section>
+
+<section class="wrap section" id="priser" aria-labelledby="pris-rubrik">
+  <div class="head">
+    <h2 id="pris-rubrik">Två paket. Fasta priser.</h2>
+    <p>Priserna är exklusive moms. Uppsägningstiden är tre månader, och du äger ditt innehåll och din domän.</p>
+  </div>
+  <div class="plans">
+    <article class="plan" aria-labelledby="paket-drift">
+      <h3 id="paket-drift">Drift</h3>
+      <p class="price"><span class="amount">595</span> kr/mån</p>
+      <p class="for">För dig som vill ha en snabb sajt som någon sköter.</p>
+      <ul class="checks">
+        <li>Drift, säker anslutning och säkerhetskopior</li>
+        <li>Övervakning av att sajten är uppe</li>
+        <li>Ändringar av text, bilder och öppettider, 30 minuter per månad</li>
+        <li>Månadsrapport om besök och drift</li>
+        <li>Svar inom två arbetsdagar</li>
+      </ul>
+    </article>
+    <article class="plan plan-hi" aria-labelledby="paket-synlighet">
+      <h3 id="paket-synlighet">Synlighet</h3>
+      <p class="price"><span class="amount">1&nbsp;195</span> kr/mån</p>
+      <p class="for">För dig som vill synas mer lokalt, i Google och i AI-tjänster.</p>
+      <p class="plus">Allt i Drift, plus:</p>
+      <ul class="checks">
+        <li>Google-företagsprofil: inlägg och svar på recensioner</li>
+        <li>Lokal sökoptimering varje månad</li>
+        <li>Koll på hur AI-tjänster beskriver dig, varje kvartal</li>
+        <li>Ändringar 60 minuter per månad</li>
+        <li>Månadsrapport med förslag på åtgärder</li>
+      </ul>
+    </article>
+  </div>
+  <p class="note">Ny sajt från 4&nbsp;900 kr. Arbete utöver paketet kostar 750 kr i timmen och görs alltid efter ditt godkännande. Bygger jag en ny sajt åt dig gäller avtalet i minst tolv månader.</p>
+</section>
+
+<section class="wrap section" aria-labelledby="steg-rubrik">
+  <h2 id="steg-rubrik">Så går det till</h2>
+  <ol class="steps">
+    <li><span class="n" aria-hidden="true">1</span><h3>Vi pratar i 15 minuter</h3><p>Du berättar om företaget. Jag har tittat på din sajt och din Google-profil innan vi hörs.</p></li>
+    <li><span class="n" aria-hidden="true">2</span><h3>Du får ett förslag</h3><p>Vad jag skulle ändra, vilket paket som passar och vad det kostar.</p></li>
+    <li><span class="n" aria-hidden="true">3</span><h3>Jag tar över</h3><p>Drift och uppdateringar sköter jag från och med nu, och med Synlighet även din Google-profil.</p></li>
+    <li><span class="n" aria-hidden="true">4</span><h3>Rapport varje månad</h3><p>Besök, sökningar och vad som hänt, kort och begripligt.</p></li>
+  </ol>
+</section>
+
+<section class="band-dark" id="ai" aria-labelledby="ai-rubrik">
+  <div class="wrap ai">
+    <div class="ai-copy">
+      <h2 id="ai-rubrik">Det här läser AI-tjänster om dig.</h2>
+      <p>62 % av svenskarna använder AI-tjänster, enligt Svenskarna och internet 2026. Allt fler frågar dem i stället för att klicka runt. Jag ser till att de kan läsa din sajt och får dina fakta rätt: öppettider, priser, var du finns och hur man når dig.</p>
+      <p>Ingen kan bestämma vad en AI rekommenderar. Men den kan bara återge det den hittar, och det kan jag se till att den hittar.</p>
+    </div>
+    <figure class="code">
+      <figcaption>Så här ser början av Nollkommas egen <a href="/llms.txt">llms.txt</a> ut, en textfil som beskriver företaget för AI-tjänster.</figcaption>
+<pre><code># Nollkomma
+
+&gt; Nollkomma bygger och sköter snabba hemsidor
+&gt; för småföretag. Baserat i Norrköping.
+
+## Paket (exklusive moms)
+- Drift: 595 kr/mån
+- Synlighet: 1 195 kr/mån
+- Ny sajt: från 4 900 kr
+
+## Område
+På plats i Östergötland, på distans i hela Sverige.
+
+## Kontakt
+- Telefon: 070-051 00 86
+- E-post: hej@nollkomma.se</code></pre>
+    </figure>
+  </div>
+</section>
+
+<section class="wrap faq" aria-labelledby="fragor-rubrik">
+  <h2 id="fragor-rubrik">Vanliga frågor</h2>
+  <details><summary>Vad kostar det?</summary><p>Drift kostar 595 kr och Synlighet 1&nbsp;195 kr i månaden, exklusive moms. En ny sajt kostar från 4&nbsp;900 kr.</p></details>
+  <details><summary>Hur länge binder jag mig?</summary><p>Uppsägningstiden är tre månader. Bygger jag en ny sajt åt dig gäller avtalet i minst tolv månader.</p></details>
+  <details><summary>Vem äger sajten?</summary><p>Du äger ditt innehåll och din domän. Slutar du får du sajtens filer, så att du kan flytta den.</p></details>
+  <details><summary>Jobbar du bara i Norrköping?</summary><p>Jag träffar kunder på plats i hela Östergötland. I resten av Sverige jobbar vi på distans, över telefon och video.</p></details>
+  <details><summary>Hur snabbt svarar du?</summary><p>Inom två arbetsdagar.</p></details>
+  <details><summary>Kan du lova en förstaplats på Google?</summary><p>Nej, det kan ingen. Jag fixar det som går att mäta: att sajten är snabb, att fakta stämmer och att Google och AI-tjänster kan läsa den.</p></details>
+</section>
+
+<section class="band-tint" id="kontakt" aria-labelledby="kontakt-rubrik">
+  <div class="wrap contact">
+    <div class="contact-copy">
+      <h2 id="kontakt-rubrik">Boka 15 minuter.</h2>
+      <p>Ring eller mejla, så tittar jag på din sajt innan vi hörs. Jag svarar inom två arbetsdagar.</p>
+      <div class="actions">
+        <a class="btn" href="tel:+46700510086"><span>Ring <span class="nowrap">070-051 00 86</span></span></a>
+        <a class="btn btn-ghost" href="mailto:hej@nollkomma.se">Mejla hej@nollkomma.se</a>
+      </div>
+    </div>
+    <div class="person">
+      <span class="avatar" aria-hidden="true">0,</span>
+      <div>
+        <p class="pname">Sebastian</p>
+        <p>Nollkomma, Norrköping</p>
+        <p>På plats i Östergötland, på distans i hela Sverige</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="wrap foot">
+  <p><span>Nollkomma</span><span>Enskild firma, godkänd för F-skatt</span><span>Norrköping</span><span>Inga cookies</span><a href="/integritet">Integritet</a></p>
+</footer>
+
+<script>
+(function () {
+  var out = document.getElementById('laddtid');
+  function show() {
+    var ms = null;
+    try {
+      var nav = performance.getEntriesByType('navigation')[0];
+      if (nav) ms = nav.loadEventEnd > 0 ? nav.loadEventEnd - nav.startTime : nav.domContentLoadedEventEnd - nav.startTime;
+    } catch (e) { ms = null; }
+    if (!ms || ms <= 0) ms = performance.now();
+    out.textContent = (ms / 1000).toFixed(2).replace('.', ',');
+  }
+  if (document.readyState === 'complete') setTimeout(show, 0);
+  else addEventListener('load', function () { setTimeout(show, 0); }, { once: true });
+
+  var btn = document.getElementById('film-play');
+  if (btn) btn.addEventListener('click', function () {
+    var v = document.createElement('video');
+    v.src = '/assets/film/nollkomma-30s-v1.mp4';
+    v.controls = true; v.muted = true; v.playsInline = true;
+    v.setAttribute('playsinline', '');
+    v.width = 1080; v.height = 1350;
+    v.setAttribute('aria-label', 'Filmen om Nollkomma, 30 sekunder utan ljud');
+    // om filen inte får spelas direkt (t.ex. i en förhandsvisning): hämta den och spela upp som blob
+    v.addEventListener('error', function retry() {
+      v.removeEventListener('error', retry);
+      fetch('/assets/film/nollkomma-30s-v1.mp4').then(function (r) { return r.blob(); })
+        .then(function (b) { v.src = URL.createObjectURL(b); v.play().catch(function () {}); })
+        .catch(function () {});
+    });
+    btn.replaceWith(v);
+    v.focus();
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  });
+})();
+</script>
+</body>
+</html>
