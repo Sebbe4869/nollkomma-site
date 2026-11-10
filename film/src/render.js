@@ -10,12 +10,7 @@ const mode = process.argv[3] || 'stills';
 const MEAS = process.env.MEAS || '0,4';
 const W = 1080, H = fmt === '45' ? 1350 : 1920, FPS = 30;
 // Varje film är en lista av avsnitt ur tidslinjen. `under` fryser en scen under övergången, `hide` gömmer scener.
-const CUTS = {
-  full: [[0, 8.0], [8.0, 9.8], [9.8, 15.0], [15.0, 21.0], [21.0, 25.5], [25.5, 30.0]].map(([from, to]) => ({ from, to })),
-  fart: [{ from: 0, to: 3.4 }, { from: 8.0, to: 9.8 }, { from: 9.8, to: 15.0 }, { from: 25.5, to: 30.0, under: { id: 'sC', t: 14.99 }, hide: ['sE'] }],
-  ai: [{ from: 3.95, to: 8.0 }, { from: 15.0, to: 21.0, under: { id: 'sA', t: 7.99 }, hide: ['sC'] }, { from: 25.5, to: 30.0, under: { id: 'sD', t: 20.99 }, hide: ['sE'] }],
-  pris: [{ from: 21.0, to: 25.5, hide: ['sD'] }, { from: 25.5, to: 30.0 }],
-};
+const CUTS = require('./cuts.json'); // delas med sound.py, som klipper ljudet på samma ställen
 const CUT = process.env.CUT || 'full';
 if (!CUTS[CUT]) { console.error('Okänd film: ' + CUT + '. Välj en av: ' + Object.keys(CUTS).join(', ')); process.exit(1); }
 const SEGS = CUTS[CUT];

@@ -69,7 +69,10 @@ Källkoden ligger i `film/src`. Laddtiden som visas är en parameter:
 ```bash
 MEAS=0,4 sh film/build.sh           # alla fyra filmerna i 9:16 och 4:5 → film/out/
 MEAS=0,4 sh film/build.sh fart ai   # bara vissa: full, fart, ai, pris
+MEAS=0,4 sh film/ljud.sh            # byter bara ljudet på färdiga filmer; GAIN_DB=… ändrar nivån
 ```
+
+Ljudspåret byggs i kod av `film/sound.py` (ljudeffekter som följer bilden och en musikmatta), så det finns inga licenser att hålla reda på. Klippställena i `film/src/cuts.json` delas av bild och ljud.
 
 Byt `MEAS` mot den uppmätta laddtiden från den riktiga sajten innan filmerna publiceras. Kopiera sedan `nollkomma-30s-4x5.mp4` till `static/assets/film/` med nytt versionsnummer i filnamnet och uppdatera sökvägen i `src/index.html`.
 
