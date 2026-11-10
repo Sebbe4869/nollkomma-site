@@ -1,0 +1,12 @@
+{
+  // Inställningar för Cloudflare Workers. Namnet ska vara samma som projektets namn i Cloudflare.
+  "name": "nollkomma-site",
+  "main": "worker.js",
+  "compatibility_date": "2026-06-01",
+  "assets": {
+    "directory": "./dist",          // den färdigbyggda sajten
+    "binding": "ASSETS",
+    "not_found_handling": "404-page" // visar dist/404.html för adresser som inte finns
+  },
+  "observability": { "enabled": true }
+}

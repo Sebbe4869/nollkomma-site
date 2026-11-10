@@ -6,7 +6,16 @@ Statisk sajt för nollkomma.se med tre små API-funktioner: sajttestet, Googles 
 - `functions/` är API-funktionerna (Cloudflare Pages Functions). De ligger utanför `dist/` med flit; så vill Cloudflare ha det.
 - `lib/` är logiken som funktionerna delar.
 
-## Publicera med Cloudflare Pages
+## Publicera med Cloudflare
+
+Repot fungerar på två sätt, med samma kod:
+
+- **Workers** (det dashboarden föreslår när man importerar ett repo): lämna Build command tomt och behåll Deploy command `npx wrangler deploy`. Inställningarna står i `wrangler.jsonc`, och `worker.js` skickar `/api/*` till funktionerna och allt annat till `dist/`. Projektnamnet i Cloudflare ska vara `nollkomma-site`, samma som `name` i `wrangler.jsonc`.
+- **Pages**: stegen nedan.
+
+Variabler, spärregel, AI-inställningar, statistik och e-post (punkt 4–7 nedan) gäller i båda fallen.
+
+### Med Pages
 
 Sajttestet och chatten fungerar bara när sajten publiceras från ett Git-repo (eller med `wrangler pages deploy`). Att dra in en zip-fil i Cloudflare publicerar sidorna men inte funktionerna.
 
