@@ -292,6 +292,14 @@ function pop(el, t, a, d=0.45, from=0.6){ const x=prog(t,a,a+d); const p = x<=0?
 
 const T = { B:8.0, C:9.8, D:15.0, E:21.0, F:25.5, END:30.0 };
 
+// Kortfilmer: rita en scen vid tiden t, med en annan scen fryst under (så att övergången har något att glida över)
+// och valfria scener gömda. Används av render.js för klippen i CUTS.
+window.renderCut = function(t, under, hide){
+  if (under) window.render(under.t);
+  window.render(t);
+  (hide || []).forEach(function(id){ $(id).style.display = 'none'; });
+  if (under) $(under.id).style.display = 'block';
+};
 window.render = function(t){
   show('sA', t, 0, T.B);
   show('sB', t, T.B, T.C+0.45);

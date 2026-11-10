@@ -9,7 +9,16 @@ const fmt = process.argv[2] || '916';
 const mode = process.argv[3] || 'stills';
 const MEAS = process.env.MEAS || '0,4';
 const W = 1080, H = fmt === '45' ? 1350 : 1920, FPS = 30;
-const SEGS = [[0, 8.0], [8.0, 9.8], [9.8, 15.0], [15.0, 21.0], [21.0, 25.5], [25.5, 30.0]];
+// Varje film är en lista av avsnitt ur tidslinjen. `under` fryser en scen under övergången, `hide` gömmer scener.
+const CUTS = {
+  full: [[0, 8.0], [8.0, 9.8], [9.8, 15.0], [15.0, 21.0], [21.0, 25.5], [25.5, 30.0]].map(([from, to]) => ({ from, to })),
+  fart: [{ from: 0, to: 3.4 }, { from: 8.0, to: 9.8 }, { from: 9.8, to: 15.0 }, { from: 25.5, to: 30.0, under: { id: 'sC', t: 14.99 }, hide: ['sE'] }],
+  ai: [{ from: 3.95, to: 8.0 }, { from: 15.0, to: 21.0, under: { id: 'sA', t: 7.99 }, hide: ['sC'] }, { from: 25.5, to: 30.0, under: { id: 'sD', t: 20.99 }, hide: ['sE'] }],
+  pris: [{ from: 21.0, to: 25.5, hide: ['sD'] }, { from: 25.5, to: 30.0 }],
+};
+const CUT = process.env.CUT || 'full';
+if (!CUTS[CUT]) { console.error('Okänd film: ' + CUT + '. Välj en av: ' + Object.keys(CUTS).join(', ')); process.exit(1); }
+const SEGS = CUTS[CUT];
 
 (async () => {
   const browser = await chromium.launch();
@@ -31,31 +40,34 @@ const SEGS = [[0, 8.0], [8.0, 9.8], [9.8, 15.0], [15.0, 21.0], [21.0, 25.5], [25
   if (mode === 'stills') {
     const outDir = path.join(ROOT, 'stills'); fs.mkdirSync(outDir, { recursive: true });
     for (const t of process.argv.slice(4).map(Number)) {
-      await page.evaluate(t => window.render(t), t);
-      const f = path.join(outDir, `${fmt}_${t.toFixed(2)}.jpg`);
+      // t räknas i den valda filmens egen tid
+      let left = t, seg = SEGS[SEGS.length - 1];
+      for (const s of SEGS) { if (left < s.to - s.from) { seg = s; break; } left -= s.to - s.from; }
+      await page.evaluate(([tt, under, hide]) => window.renderCut(tt, under, hide), [seg.from + left, seg.under || null, seg.hide || []]);
+      const f = path.join(outDir, `${CUT}_${fmt}_${t.toFixed(2)}.jpg`);
       await page.screenshot({ path: f, type: 'jpeg', quality: 92 });
       console.log(f);
     }
   } else {
-    const outDir = path.join(ROOT, 'out', fmt); fs.mkdirSync(outDir, { recursive: true });
+    const outDir = CUT === 'full' ? path.join(ROOT, 'out', fmt) : path.join(ROOT, 'out', fmt, CUT); fs.mkdirSync(outDir, { recursive: true });
     const only = process.env.SEG ? process.env.SEG.split(',').map(Number) : null;
     for (let s = 0; s < SEGS.length; s++) {
       if (only && !only.includes(s)) continue;
-      const f0 = Math.round(SEGS[s][0] * FPS), f1 = Math.round(SEGS[s][1] * FPS);
+      const seg = SEGS[s], n = Math.round((seg.to - seg.from) * FPS);
       const final = path.join(outDir, `seg${s}.mp4`), tmp = path.join(outDir, `seg${s}.tmp.mp4`);
       const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
         '-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-tune', 'animation', '-pix_fmt', 'yuv420p', '-r', String(FPS), tmp],
         { stdio: ['pipe', 'inherit', 'inherit'] });
       const done = new Promise((res, rej) => ff.on('close', c => c === 0 ? res() : rej(new Error('ffmpeg exit ' + c))));
-      for (let fr = f0; fr < f1; fr++) {
-        await page.evaluate(t => window.render(t), fr / FPS);
+      for (let k = 0; k < n; k++) {
+        await page.evaluate(([t, under, hide]) => window.renderCut(t, under, hide), [seg.from + k / FPS, seg.under || null, seg.hide || []]);
         const buf = await page.screenshot({ type: 'jpeg', quality: 92 });
         if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
       }
       ff.stdin.end();
       await done;
       fs.renameSync(tmp, final);
-      console.log(`seg${s}: ${f1 - f0} frames`);
+      console.log(`${CUT} seg${s}: ${n} frames`);
     }
     fs.writeFileSync(path.join(outDir, 'list.txt'), SEGS.map((_, s) => `file '${path.join(outDir, `seg${s}.mp4`)}'`).join('\n') + '\n');
   }

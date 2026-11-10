@@ -6,7 +6,7 @@
 Nollkomma är en enskild firma, godkänd för F-skatt. Kunden äger sitt innehåll och sin domän. Fast pris varje månad.
 
 ## Paket (priser exklusive moms)
-- Drift: 595 kr/mån. Drift, säker anslutning och säkerhetskopior, övervakning av att sajten är uppe, ändringar av text, bilder och öppettider 30 minuter per månad, månadsrapport om besök och drift.
+- Drift: 595 kr/mån. Drift, säker anslutning och säkerhetskopior, övervakning av att sajten är uppe, en domän med förnyelse, ändringar av text, bilder och öppettider 30 minuter per månad, månadsrapport om besök och drift.
 - Synlighet: 1 195 kr/mån. Allt i Drift, plus Google-företagsprofil (inlägg och svar på recensioner), lokal sökoptimering varje månad, kvartalsvis koll på hur AI-tjänster beskriver kunden, ändringar 60 minuter per månad och månadsrapport med förslag på åtgärder.
 - Ny sajt: från 4 900 kr.
 - Arbete utöver paketet: 750 kr i timmen, alltid efter kundens godkännande.

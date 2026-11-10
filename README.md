@@ -1,18 +1,43 @@
 # Nollkomma – webbplatsen
 
-Statisk sajt för nollkomma.se: snabba hemsidor för småföretag i Norrköping, på plats i Östergötland och på distans i hela Sverige.
+Statisk sajt för nollkomma.se med tre små API-funktioner: sajttestet, Googles mätning och AI-assistenten.
 
-Allt som ska ut på nätet ligger färdigbyggt i `dist/`. Ingen byggprocess behövs för att publicera.
+- `dist/` är den färdigbyggda sajten.
+- `functions/` är API-funktionerna (Cloudflare Pages Functions). De ligger utanför `dist/` med flit; så vill Cloudflare ha det.
+- `lib/` är logiken som funktionerna delar.
 
 ## Publicera med Cloudflare Pages
 
-1. Cloudflare → Workers & Pages → skapa ett Pages-projekt → koppla till Git → välj det här repot.
-2. Ramverk: inget. Byggkommando: lämna tomt. Mapp att publicera (build output directory): `dist`.
-3. Lägg till domänerna `nollkomma.se` och `www.nollkomma.se` under Custom domains.
-4. Slå på Web Analytics (cookiefri statistik) och Email Routing (`hej@nollkomma.se` → din vanliga e-post).
-5. Security → Bots: tillåt AI-crawlers (Search, Agent och Training). Annars kan Cloudflare blockera dem trots `robots.txt`.
+Sajttestet och chatten fungerar bara när sajten publiceras från ett Git-repo (eller med `wrangler pages deploy`). Att dra in en zip-fil i Cloudflare publicerar sidorna men inte funktionerna.
 
-Varje push till `main` publiceras automatiskt.
+1. Cloudflare → Workers & Pages → Create → Pages → Connect to Git → välj det här repot.
+2. Ramverk: inget. Byggkommando: lämna tomt. Build output directory: `dist`.
+3. Custom domains: `nollkomma.se` och `www.nollkomma.se`.
+4. Settings → Variables and Secrets (Production):
+
+   | Namn | Typ | Behövs? | Vad den gör |
+   |---|---|---|---|
+   | `ANTHROPIC_API_KEY` | Secret | För chatten | Slår på AI-assistenten. Utan den syns chatten inte. Skapas i Claude Console (platform.claude.com → API keys). Sätt en månadsgräns under Billing → Spend limits. |
+   | `PSI_API_KEY` | Secret | Valfri | Höjer kvoten för Googles mätning. Skapas i Google Cloud Console för PageSpeed Insights API. |
+   | `CHAT_MODEL` | Text | Valfri | Byter modell. Standard är `claude-haiku-5-5`. |
+   | `CHAT_AV` | Text | Valfri | Värdet `1` stänger av chatten utan att ta bort nyckeln. |
+
+5. Security → WAF → Rate limiting rules: adresser som börjar med `/api/`, högst 10 anrop per 10 sekunder och IP-adress, åtgärd Block.
+6. Security → Bots: tillåt AI-crawlers (Search, Agent och Training). Annars kan Cloudflare blockera dem trots `robots.txt`.
+7. Slå på Web Analytics och Email Routing (`hej@nollkomma.se` → din vanliga e-post).
+
+Varje push till `main` publiceras automatiskt. Lägg aldrig en nyckel i en fil i repot.
+
+## API-funktionerna
+
+| Adress | Vad den gör |
+|---|---|
+| `POST /api/kollen` `{ "url": "…" }` | Hämtar sidan, robots.txt, llms.txt och sitemap.xml och svarar med nio kontroller. |
+| `POST /api/fart` `{ "url": "…" }` | Frågar Googles PageSpeed Insights om mobilpoäng och laddtid. Tar 10–30 sekunder. |
+| `GET /api/chatt` | Svarar `{ "aktiv": true }` när chatten är påslagen. |
+| `POST /api/chatt` `{ "messages": […], "koll": {…} }` | Skickar samtalet till Claude API och svarar `{ "svar": "…" }`. |
+
+Alla tar bara emot anrop från sajtens egna sidor, sparar ingenting och har gränser för längd och antal meddelanden. Assistentens fakta och regler står i `lib/chatt.js`. Ändrar du ett pris på sajten ska det ändras där också; ett test säger till om de går isär.
 
 ## Ändra sajten
 
@@ -20,39 +45,45 @@ Varje push till `main` publiceras automatiskt.
 |---|---|
 | Sidor | `src/index.html`, `src/integritet.html`, `src/404.html` |
 | Gemensam CSS | `src/base.css` (läggs in i varje sida vid bygget) |
+| Sajttestets och chattens gränssnitt | `static/assets/app.js` |
 | Texter för sökmotorer och AI | `src/robots.txt`, `src/llms.txt`, `src/sitemap.xml`, JSON-LD i `src/index.html` |
 | Säkerhets- och cacheregler | `src/_headers` |
 | Bilder, typsnitt, film | `static/` |
 
-Bygg om efter en ändring:
-
 ```bash
-python3 tools/build.py        # skriver dist/ (och preview/ för förhandsvisningen i Claude)
+python3 tools/build.py                         # skriver dist/ (och preview/ för förhandsvisningen i Claude)
+node --test tools/test-functions.mjs           # 15 tester av funktionerna, med påhittade nätverkssvar
+npx wrangler pages dev dist --port 8788 -b ANTHROPIC_API_KEY=lokal-test    # kör sajten och funktionerna lokalt
+node tools/check.js http://127.0.0.1:8788      # skärmdumpar, sidled-scroll, filmknappen (AXE_PATH=… för axe)
+node tools/check-ui.js http://127.0.0.1:8788   # 40 kontroller av sajttestet och chatten i mobil och dator
 ```
 
-Kontrollera:
+Uppmätt lokalt 10 november 2026: Lighthouse 100/100/100/100 i mobil och dator, 66 kB, det största innehållet syns efter 1,1 s på simulerat långsamt 4G och 0,3 s på dator.
+
+Inte provat: riktiga svar från Google och Claude API (byggmiljön når dem inte) och uppspelning av filmen (testwebbläsaren saknar H.264). Prova de tre sakerna först när sajten är live.
+
+## Filmerna
+
+Källkoden ligger i `film/src`. Laddtiden som visas är en parameter:
 
 ```bash
-cd dist && python3 -m http.server 8090 &
-node tools/check.js http://127.0.0.1:8090    # skärmdumpar, sidled-scroll, filmknappen; AXE_PATH=… för axe
+MEAS=0,4 sh film/build.sh           # alla fyra filmerna i 9:16 och 4:5 → film/out/
+MEAS=0,4 sh film/build.sh fart ai   # bara vissa: full, fart, ai, pris
 ```
 
-Uppmätt lokalt 9 november 2026: Lighthouse 100/100/100/100 i mobil och dator, 74 kB, LCP 1,2 s (simulerat långsamt 4G) och 0,3 s (dator).
+Byt `MEAS` mot den uppmätta laddtiden från den riktiga sajten innan filmerna publiceras. Kopiera sedan `nollkomma-30s-4x5.mp4` till `static/assets/film/` med nytt versionsnummer i filnamnet och uppdatera sökvägen i `src/index.html`.
 
-## Filmen
-
-Källkoden ligger i `film/src`. Siffran för laddtid är en parameter:
+## Marknadsmaterialet
 
 ```bash
-MEAS=0,4 sh film/build.sh     # skriver film/out/nollkomma-30s-9x16.mp4 och -4x5.mp4
+node tools/make_marketing.js <mapp>   # profilbild, omslag, fem inläggsbilder och säljbladet som PDF
 ```
-
-Byt `MEAS` mot den uppmätta laddtiden från den riktiga sajten innan filmen publiceras. Kopiera sedan 4:5-versionen till `static/assets/film/` med nytt versionsnummer i filnamnet och uppdatera sökvägen i `src/index.html`.
 
 ## Kvar innan lansering
 
 - [ ] Köp nollkomma.se (svensk domänleverantör; Cloudflare säljer inte .se)
-- [ ] Cloudflare: konto, namnservrar, Pages-projekt, Email Routing, Web Analytics, AI-crawlers tillåtna
-- [ ] Mät laddtiden på den riktiga sajten och rendera om filmen
+- [ ] Cloudflare enligt listan ovan
+- [ ] Mät laddtiden på den riktiga sajten och rendera om filmerna
+- [ ] Prova sajttestet, Googles mätning, chatten och filmen på den riktiga sajten
 - [ ] Foto till kontaktdelen
 - [ ] Ett kundcase med tillstånd (före/efter)
