@@ -27,7 +27,7 @@ Sajttestet och chatten fungerar bara när sajten publiceras från ett Git-repo (
    | Namn | Typ | Behövs? | Vad den gör |
    |---|---|---|---|
    | `ANTHROPIC_API_KEY` | Secret | För chatten | Slår på AI-assistenten. Utan den syns chatten inte. Skapas i Claude Console (platform.claude.com → API keys). Sätt en månadsgräns under Billing → Spend limits. |
-   | `PSI_API_KEY` | Secret | Valfri | Höjer kvoten för Googles mätning. Skapas i Google Cloud Console för PageSpeed Insights API. |
+   | `PSI_API_KEY` | Secret | För Googles mätning | Utan nyckel svarar Google 429 (kvoten slut) från Cloudflares nät, så raden "Googles mätning på mobil" blir tom. Skapas i Google Cloud Console för PageSpeed Insights API. |
    | `CHAT_MODEL` | Text | Valfri | Byter modell. Standard är `claude-haiku-5-5`. |
    | `CHAT_AV` | Text | Valfri | Värdet `1` stänger av chatten utan att ta bort nyckeln. |
 
@@ -69,7 +69,7 @@ node tools/check-ui.js http://127.0.0.1:8788   # 40 kontroller av sajttestet och
 
 Uppmätt lokalt 10 november 2026: Lighthouse 100/100/100/100 i mobil och dator, 66 kB, det största innehållet syns efter 1,1 s på simulerat långsamt 4G och 0,3 s på dator.
 
-Inte provat: riktiga svar från Google och Claude API (byggmiljön når dem inte) och uppspelning av filmen (testwebbläsaren saknar H.264). Prova de tre sakerna först när sajten är live.
+Provat på den publicerade sajten 10 november 2026: sidorna, 404-sidan, säkerhetsreglerna, filmen och sajttestet mot en riktig sajt och mot sig själv. Inte provat än: Googles mätning med nyckel och AI-assistenten med nyckel.
 
 ## Filmerna
 
