@@ -19,7 +19,11 @@ export async function onRequestPost({ request, env }) {
   let data;
   try {
     const res = await fetchWithTimeout(api.href, {}, 55000);
-    if (!res.ok) return json({ error: 'Googles mätning svarade inte just nu.' }, 502);
+    if (!res.ok) {
+      // 429 = Googles kvot är slut. Utan PSI_API_KEY delas kvoten med alla andra som anropar från samma nät.
+      console.log('fart: Google svarade', res.status, env && env.PSI_API_KEY ? '(med nyckel)' : '(utan nyckel)');
+      return json({ error: 'Googles mätning svarade inte just nu.', googleStatus: res.status }, 502);
+    }
     data = await res.json();
   } catch (e) { return json({ error: 'Googles mätning tog för lång tid.' }, 504); }
 

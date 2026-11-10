@@ -99,6 +99,17 @@ test('/api/kollen: fel adress, fel ursprung, sida som inte svarar', async () => 
   assert.equal((await kollen.onRequestPost({ request: post('/api/kollen', { url: 'bra.se' }), env: {} })).status, 422);
 });
 
+test('/api/kollen: den egna sajten läses ur de publicerade filerna, inte över nätet', async () => {
+  const calls = mockFetch([]);
+  const files = { '/': ['<title>Nollkomma</title><meta name="description" content="x"><meta name="viewport" content="w"><script type="application/ld+json">{"@type":"ProfessionalService"}</script>', 'text/html'], '/robots.txt': ['User-agent: *\nAllow: /\nSitemap: https://nollkomma.se/sitemap.xml', 'text/plain'], '/llms.txt': ['# Nollkomma\n> Snabba hemsidor för småföretag.', 'text/plain'], '/sitemap.xml': ['<urlset></urlset>', 'application/xml'] };
+  const asked = [];
+  const ASSETS = { fetch: async req => { const p = new URL(req.url).pathname; asked.push(p); const f = files[p]; return f ? new Response(f[0], { status: 200, headers: { 'content-type': f[1] } }) : new Response('', { status: 404 }); } };
+  const data = await (await kollen.onRequestPost({ request: post('/api/kollen', { url: 'nollkomma.se' }), env: { ASSETS } })).json();
+  assert.equal(data.passed, 9);
+  assert.equal(calls.length, 0);
+  assert.deepEqual(asked.sort(), ['/', '/llms.txt', '/robots.txt', '/sitemap.xml']);
+});
+
 test('/api/fart: läser poäng och LCP ur Googles svar och skickar nyckeln om den finns', async () => {
   const calls = mockFetch([['googleapis.com', () => Response.json({ lighthouseResult: { categories: { performance: { score: 0.87 } }, audits: { 'largest-contentful-paint': { numericValue: 2140.5 }, 'cumulative-layout-shift': { numericValue: 0.02 } } } })]]);
   const data = await (await fart.onRequestPost({ request: post('/api/fart', { url: 'bra.se' }), env: { PSI_API_KEY: 'testnyckel' } })).json();
@@ -108,7 +119,9 @@ test('/api/fart: läser poäng och LCP ur Googles svar och skickar nyckeln om de
   assert.equal(u.origin + u.pathname, 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed');
   assert.deepEqual([u.searchParams.get('url'), u.searchParams.get('strategy'), u.searchParams.get('key')], ['https://bra.se/', 'mobile', 'testnyckel']);
   mockFetch([['googleapis.com', () => new Response('{}', { status: 429 })]]);
-  assert.equal((await fart.onRequestPost({ request: post('/api/fart', { url: 'bra.se' }), env: {} })).status, 502);
+  const quota = await fart.onRequestPost({ request: post('/api/fart', { url: 'bra.se' }), env: {} });
+  assert.equal(quota.status, 502);
+  assert.equal((await quota.json()).googleStatus, 429);
   assert.equal((await fart.onRequestPost({ request: post('/api/fart', { url: '10.0.0.1' }), env: {} })).status, 400);
 });
 
