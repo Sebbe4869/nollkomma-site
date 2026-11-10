@@ -1,0 +1,13 @@
+# Kopiera till .dev.vars för att köra lokalt (filen ska aldrig in i git).
+# På Cloudflare lägger du samma namn under Pages-projektet → Settings → Variables and Secrets.
+
+# Slår på AI-assistenten. Skapas i Claude Console: https://platform.claude.com/ → API keys
+ANTHROPIC_API_KEY=
+
+# Valfri. Höjer kvoten för Googles mätning i "Testa din sajt".
+# Skapas i Google Cloud Console: aktivera "PageSpeed Insights API" och skapa en API-nyckel.
+PSI_API_KEY=
+
+# Valfria.
+# CHAT_MODEL=claude-haiku-5-5
+# CHAT_AV=1          # stänger av AI-assistenten utan att ta bort nyckeln

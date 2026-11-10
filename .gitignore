@@ -6,3 +6,5 @@ node_modules/
 *.zip
 *.log
 .DS_Store
+.dev.vars
+.wrangler/

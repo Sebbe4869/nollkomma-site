@@ -21,6 +21,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/familjen-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/familjen-grotesk-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/familjen-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /*BASE*/
 /* startsidan */
@@ -32,6 +33,7 @@
 .meter-n{display:flex;align-items:baseline;flex-wrap:wrap;gap:14px;color:var(--strom)}
 .meter-num{font-size:clamp(88px,15vw,176px);line-height:.9;font-weight:700;letter-spacing:-.05em;font-variant-numeric:tabular-nums;min-width:3.3ch}
 .meter-u{font-size:clamp(24px,3vw,30px);font-weight:600}
+@media (max-width:560px){.meter-n{flex-direction:column;align-items:flex-start;gap:6px}}
 
 .film{display:grid;gap:36px;padding-block:24px 80px;align-items:center}
 .film-copy{display:flex;flex-direction:column;gap:18px;min-width:0;max-width:36em}
@@ -46,6 +48,42 @@
 .film-play:hover .play{transform:scale(1.06)}
 .film-meta{position:absolute;left:16px;bottom:16px;background:rgba(21,32,30,.82);color:var(--vit);font-size:15px;font-weight:600;padding:6px 12px;border-radius:999px}
 .film-frame video{width:100%;height:100%;object-fit:cover;background:var(--svart)}
+
+.test{display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start;padding-block:24px 80px}
+.test-main{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.koll-form{display:flex;flex-direction:column;gap:8px;max-width:620px}
+.koll-form label{font-weight:600}
+.koll-row{display:flex;flex-wrap:wrap;gap:10px}
+.koll-row input,.chatt-form input{flex:1 1 220px;min-width:0;min-height:52px;padding:0 20px;border-radius:999px;border:2px solid var(--svart);background:var(--papper);color:var(--svart);font:inherit}
+.koll-row input::placeholder,.chatt-form input::placeholder{color:var(--text-3);opacity:1}
+.koll-row input[aria-invalid="true"]{border-color:var(--varn)}
+button.btn{font-family:inherit;cursor:pointer}
+.btn[aria-disabled="true"]{opacity:.65;cursor:progress}
+.koll-fel{color:var(--varn);font-weight:600}
+.koll-ut{background:var(--papper);border-radius:24px;padding:clamp(22px,3.5vw,32px);display:flex;flex-direction:column;gap:18px;max-width:760px}
+.koll-summa{font-size:clamp(24px,3.4vw,30px);letter-spacing:-.02em;overflow-wrap:anywhere}
+.koll-summa:focus{outline:none}
+.koll-exempel{align-self:flex-start;background:var(--tint);color:var(--text-tint);font-weight:600;font-size:15px;padding:6px 14px;border-radius:999px}
+.koll-lista{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.koll-lista li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start}
+.koll-ikon{width:26px;height:26px;margin-top:1px;border-radius:50%;display:grid;place-items:center;color:var(--vit);background:var(--text-3)}
+.koll-ikon svg{width:16px;height:16px}
+.koll-ok .koll-ikon{background:var(--strom)}
+.koll-nej .koll-ikon{background:var(--varn)}
+.koll-namn{font-weight:600}
+.koll-detalj{color:var(--text-2);font-size:17px;overflow-wrap:anywhere}
+.koll-not{font-size:16px;color:var(--text-3)}
+@media (prefers-reduced-motion:no-preference){.koll-vantar .koll-ikon svg{animation:snurra 1s linear infinite}}
+@keyframes snurra{to{transform:rotate(360deg)}}
+.chatt{flex:1 1 340px;max-width:480px;min-width:0;background:var(--papper);border-radius:24px;padding:clamp(20px,3vw,28px);display:flex;flex-direction:column;gap:12px}
+.chatt-not{font-size:15px;color:var(--text-3)}
+.chatt-logg{display:flex;flex-direction:column;gap:10px;max-height:340px;min-height:120px;overflow-y:auto;overscroll-behavior:contain;padding:4px 2px}
+.bubbla{max-width:88%;padding:10px 16px;border-radius:18px;font-size:17px;line-height:1.45;overflow-wrap:anywhere;white-space:pre-wrap}
+.bubbla-ai{align-self:flex-start;background:var(--tint);color:var(--svart);border-bottom-left-radius:6px}
+.bubbla-du{align-self:flex-end;background:var(--strom);color:var(--vit);border-bottom-right-radius:6px}
+.bubbla-vantar{color:var(--text-3)}
+.chatt-form{display:flex;gap:8px}
+.chatt-form input{min-height:44px;flex:1 1 120px;padding:0 16px}
 
 .section{padding-block:72px;display:flex;flex-direction:column;gap:32px}
 .head{display:flex;flex-direction:column;gap:12px;max-width:40em}
@@ -126,6 +164,7 @@
 <header class="wrap top">
   <div class="brand"><span class="badge" aria-hidden="true">0,</span><a href="/">Nollkomma</a></div>
   <nav class="nav" aria-label="Huvudmeny">
+    <a href="#test">Testa din sajt</a>
     <a href="#filmen">Filmen</a>
     <a href="#priser">Priser</a>
     <a href="#ai">AI-synlighet</a>
@@ -140,7 +179,7 @@
     <p class="lead">Jag bygger och sköter din sajt och ser till att den syns i Google och i AI-tjänster. Fast pris varje månad, och du äger ditt innehåll och din domän.</p>
     <div class="actions">
       <a class="btn" href="#kontakt">Boka 15 minuter</a>
-      <a class="btn btn-ghost" href="#priser">Se priserna</a>
+      <a class="btn btn-ghost" href="#test">Testa din sajt</a>
     </div>
   </div>
   <div class="meter">
@@ -173,6 +212,37 @@
       <span class="sr-only">Spela filmen, </span><span class="film-meta">30 s · utan ljud</span>
     </button>
   </div>
+</section>
+
+<section class="wrap test" id="test" aria-labelledby="test-rubrik">
+  <div class="test-main">
+    <div class="head">
+      <h2 id="test-rubrik">Testa din sajt.</h2>
+      <p>Skriv in din adress, så kontrolleras nio saker på några sekunder: om sajten svarar snabbt, om Google och AI-tjänster kan läsa den och vad som saknas. Det är gratis, och Nollkomma sparar ingenting.</p>
+    </div>
+    <form class="koll-form" id="koll-form" novalidate>
+      <label for="koll-url">Din webbadress</label>
+      <div class="koll-row">
+        <input id="koll-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="t.ex. dittforetag.se" aria-describedby="koll-fel">
+        <button class="btn" id="koll-knapp" type="submit">Testa</button>
+      </div>
+      <p class="koll-fel" id="koll-fel" role="alert" hidden></p>
+    </form>
+    <div class="koll-ut" id="koll-ut" aria-live="polite" hidden></div>
+    <noscript><p class="note">Testet behöver JavaScript. Ring eller mejla, så kollar jag din sajt åt dig.</p></noscript>
+  </div>
+  <section class="chatt" id="chatt" aria-labelledby="chatt-rubrik" hidden>
+    <h3 id="chatt-rubrik">Fråga AI-assistenten</h3>
+    <p class="chatt-not">Du pratar med en AI, inte med Sebastian. Svaren kan bli fel. Skriv inga personuppgifter.</p>
+    <div class="chatt-logg" id="chatt-logg" role="log" aria-label="Samtal med AI-assistenten" tabindex="0">
+      <div class="bubbla bubbla-ai"><span class="sr-only">AI-assistenten: </span>Hej! Fråga om priser, vad som ingår eller vad ditt testresultat betyder.</div>
+    </div>
+    <form class="chatt-form" id="chatt-form">
+      <label class="sr-only" for="chatt-in">Din fråga</label>
+      <input id="chatt-in" name="fraga" type="text" maxlength="600" autocomplete="off" placeholder="Skriv en fråga …">
+      <button class="btn btn-sm" id="chatt-knapp" type="submit">Skicka</button>
+    </form>
+  </section>
 </section>
 
 <section class="wrap section" id="priser" aria-labelledby="pris-rubrik">
@@ -322,5 +392,6 @@ På plats i Östergötland, på distans i hela Sverige.
   });
 })();
 </script>
+<script src="/assets/app.js" defer></script>
 </body>
 </html>

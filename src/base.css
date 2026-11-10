@@ -4,7 +4,7 @@
 @font-face{font-family:"Familjen Grotesk";src:url(/assets/fonts/familjen-grotesk-latin-700-normal.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{
   --kalk:#EDF0EC; --papper:#FFFFFF; --svart:#15201E; --text-2:#33413E; --text-3:#4A5754; --text-tint:#2C3B38;
-  --strom:#0B5A55; --strom-hover:#073F3B; --tint:#D3E4E0; --linje:#B9C4C0;
+  --strom:#0B5A55; --strom-hover:#073F3B; --tint:#D3E4E0; --linje:#B9C4C0; --varn:#A8401F;
   --natt:#15201E; --natt-2:#0F1817; --natt-linje:#2B3A37; --natt-text:#C9D6D2; --kod:#E3ECE9; --kod-2:#9FB3AE; --kod-lank:#9FD3C9;
   --vit:#FFFFFF;
   --font:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;

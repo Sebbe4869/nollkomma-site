@@ -46,6 +46,9 @@ for w in (400, 600, 700):
     style = style.replace(f"url(/assets/fonts/{f})", f"url(data:font/woff2;base64,{data})")
 page = ('<title>Nollkomma-sajten</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'
         + style + "\n" + body + "\n" + ld + "\n")
+# förhandsvisningen har inget API: testet och chatten visar märkta exempel där
+page = page.replace('<script src="/assets/app.js" defer></script>', '<script>window.NK_DEMO=true</script>\n<script src="/assets/app.js" defer></script>')
+assert "NK_DEMO" in page
 (PREV / "index.html").write_text(relative(page), encoding="utf-8")
 (PREV / "integritet.html").write_text(relative((DIST / "integritet.html").read_text(encoding="utf-8")), encoding="utf-8")
 for name in ["robots.txt", "llms.txt"]:

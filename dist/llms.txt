@@ -16,6 +16,9 @@ Nollkomma är en enskild firma, godkänd för F-skatt. Kunden äger sitt innehå
 - Svarstid: inom två arbetsdagar.
 - Nollkomma lovar inga placeringar i Google eller i AI-tjänster. Det som utlovas är det som går att mäta: att sajten är snabb, att fakta stämmer och att Google och AI-tjänster kan läsa den.
 
+## Testa din sajt
+- På https://nollkomma.se/#test går det att testa en webbadress gratis. Testet kontrollerar nio saker: https, serverns svarstid, sidtitel, beskrivning, mobilanpassning, schema.org, om robots.txt släpper in AI-tjänster, llms.txt och sajtkarta. Det visar också Googles mätning på mobil.
+
 ## Område
 - På plats: hela Östergötland.
 - På distans: hela Sverige, över telefon och video.
