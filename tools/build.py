@@ -54,5 +54,15 @@ assert "NK_DEMO" in page
 for name in ["robots.txt", "llms.txt"]:
     shutil.copy(SRC / name, PREV / name)
 
-print("dist:", sorted(str(p.relative_to(DIST)) for p in DIST.rglob("*") if p.is_file()))
+# --- besöksstatistik: bara på den riktiga sajten, inte i förhandsvisningen ---------
+# Cloudflare lägger inte in skriptet själv på sidor som en Worker levererar. Token är publik.
+BEACON = ("<script defer src=\"https://static.cloudflareinsights.com/beacon.min.js\" "
+          "data-cf-beacon='{\"token\": \"9fc0c86fa10240578308c85bd890e4c7\"}'></script>")
+for name in ["index.html", "integritet.html", "404.html"]:
+    p = DIST / name
+    html = p.read_text(encoding="utf-8")
+    assert html.count("</body>") == 1
+    p.write_text(html.replace("</body>", BEACON + "\n</body>"), encoding="utf-8")
+
+print("dist:",sorted(str(p.relative_to(DIST)) for p in DIST.rglob("*") if p.is_file()))
 print("preview:", sorted(str(p.relative_to(PREV)) for p in PREV.rglob("*") if p.is_file()))

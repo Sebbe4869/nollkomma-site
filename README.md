@@ -33,7 +33,7 @@ Sajttestet och chatten fungerar bara när sajten publiceras från ett Git-repo (
 
 5. Security → WAF → Rate limiting rules: adresser som börjar med `/api/`, högst 10 anrop per 10 sekunder och IP-adress, åtgärd Block.
 6. Security → Bots: tillåt AI-crawlers (Search, Agent och Training). Annars kan Cloudflare blockera dem trots `robots.txt`.
-7. Slå på Web Analytics och Email Routing (`hej@nollkomma.se` → din vanliga e-post).
+7. Slå på Web Analytics och Email Routing (`hej@nollkomma.se` → din vanliga e-post). Cloudflare lägger inte in statistikskriptet själv på sidor från en Worker, så `tools/build.py` lägger in det (token i `BEACON`).
 
 Varje push till `main` publiceras automatiskt. Lägg aldrig en nyckel i en fil i repot.
 
@@ -69,7 +69,7 @@ node tools/check-ui.js http://127.0.0.1:8788   # 40 kontroller av sajttestet och
 
 Uppmätt lokalt 10 november 2026: Lighthouse 100/100/100/100 i mobil och dator, 66 kB, det största innehållet syns efter 1,1 s på simulerat långsamt 4G och 0,3 s på dator.
 
-Provat på den publicerade sajten 10 november 2026: sidorna, 404-sidan, säkerhetsreglerna, filmen och sajttestet mot en riktig sajt och mot sig själv. Inte provat än: Googles mätning med nyckel och AI-assistenten med nyckel.
+Provat på den publicerade sajten 10 november 2026: sidorna, 404-sidan, säkerhetsreglerna, filmen och sajttestet mot en riktig sajt och mot sig själv. Provat 11 november 2026 på nollkomma.se: www och https-omdirigering, e-postposterna, AI-assistenten med nyckel, Googles mätning med nyckel (100/100 på mobil, LCP 1,5 s) och spärregeln (anrop 11–15 inom 10 s får 429).
 
 ## Filmerna
 
@@ -93,9 +93,9 @@ node tools/make_marketing.js <mapp>   # profilbild, omslag, fem inläggsbilder o
 
 ## Kvar innan lansering
 
-- [ ] Köp nollkomma.se (svensk domänleverantör; Cloudflare säljer inte .se)
-- [ ] Cloudflare enligt listan ovan
-- [ ] Mät laddtiden på den riktiga sajten och rendera om filmerna
-- [ ] Prova sajttestet, Googles mätning, chatten och filmen på den riktiga sajten
+- [x] Köp nollkomma.se (svensk domänleverantör; Cloudflare säljer inte .se)
+- [x] Cloudflare enligt listan ovan
+- [x] Mät laddtiden på den riktiga sajten (0,2–0,3 s; filmernas 0,4 s står sig)
+- [x] Prova sajttestet, Googles mätning, chatten och filmen på den riktiga sajten
 - [ ] Foto till kontaktdelen
 - [ ] Ett kundcase med tillstånd (före/efter)
