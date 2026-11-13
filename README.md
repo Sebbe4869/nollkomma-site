@@ -67,6 +67,8 @@ node tools/check.js http://127.0.0.1:8788      # skärmdumpar, sidled-scroll, fi
 node tools/check-ui.js http://127.0.0.1:8788   # 40 kontroller av sajttestet och chatten i mobil och dator
 ```
 
+Typsnittet har en reservfont ("FG Fallback" i `src/base.css`, Arial med justerade mått) så att texten inte flyttar sig när det riktiga typsnittet laddats; utan den gav Googles mätning layoutskift 0,12 på långsamt 4G.
+
 Uppmätt lokalt 10 november 2026: Lighthouse 100/100/100/100 i mobil och dator, 66 kB, det största innehållet syns efter 1,1 s på simulerat långsamt 4G och 0,3 s på dator.
 
 Provat på den publicerade sajten 10 november 2026: sidorna, 404-sidan, säkerhetsreglerna, filmen och sajttestet mot en riktig sajt och mot sig själv. Provat 11 november 2026 på nollkomma.se: www och https-omdirigering, e-postposterna, AI-assistenten med nyckel, Googles mätning med nyckel (100/100 på mobil, LCP 1,5 s) och spärregeln (anrop 11–15 inom 10 s får 429).

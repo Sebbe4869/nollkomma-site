@@ -14,12 +14,15 @@
 @font-face{font-family:"Familjen Grotesk";src:url(/assets/fonts/familjen-grotesk-latin-400-normal.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Familjen Grotesk";src:url(/assets/fonts/familjen-grotesk-latin-600-normal.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"Familjen Grotesk";src:url(/assets/fonts/familjen-grotesk-latin-700-normal.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"FG Fallback";src:local("Arial"),local("ArialMT"),local("Liberation Sans"),local("LiberationSans");font-weight:400;size-adjust:94.19%;ascent-override:108.82%;descent-override:23.89%;line-gap-override:0%}
+@font-face{font-family:"FG Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold");font-weight:600;size-adjust:91.03%;ascent-override:112.6%;descent-override:24.72%;line-gap-override:0%}
+@font-face{font-family:"FG Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("LiberationSans-Bold");font-weight:700;size-adjust:92.1%;ascent-override:111.29%;descent-override:24.43%;line-gap-override:0%}
 :root{
   --kalk:#EDF0EC; --papper:#FFFFFF; --svart:#15201E; --text-2:#33413E; --text-3:#4A5754; --text-tint:#2C3B38;
   --strom:#0B5A55; --strom-hover:#073F3B; --tint:#D3E4E0; --linje:#B9C4C0; --varn:#A8401F;
   --natt:#15201E; --natt-2:#0F1817; --natt-linje:#2B3A37; --natt-text:#C9D6D2; --kod:#E3ECE9; --kod-2:#9FB3AE; --kod-lank:#9FD3C9;
   --vit:#FFFFFF;
-  --font:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --font:"Familjen Grotesk","FG Fallback",Arial,sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   color-scheme:light;
 }
